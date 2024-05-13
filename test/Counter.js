@@ -20,10 +20,40 @@ describe("Counter", () => {
   });
 
   describe("Counting", () => {
-    it("Increment the count", async () => {
-      let transaction = await counter.increment();
+    let transaction;
+
+    it("reads the count var", async () => {
+      expect(await counter.count()).to.equal(1);
+    });
+
+    it("reads the count using getCount()", async () => {
+      expect(await counter.getCount()).to.equal(1);
+    });
+
+    it("Increments the count", async () => {
+      transaction = await counter.increment();
       await transaction.wait();
       expect(await counter.count()).to.equal(2);
+
+      transaction = await counter.increment();
+      await transaction.wait();
+      expect(await counter.count()).to.equal(3);
+    });
+
+    it("Decrements the count", async () => {
+      transaction = await counter.decrement();
+      await transaction.wait();
+      expect(await counter.count()).to.equal(0);
+
+      expect(await counter.count()).to.be.reverted;
+    });
+
+    it("reads the name var", async () => {
+      expect(await counter.name()).to.equal("Auro");
+    });
+
+    it("reads the count using getName()", async () => {
+      expect(await counter.getName()).to.equal("Auro");
     });
   });
 });
